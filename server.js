@@ -1,23 +1,45 @@
-const express = require('express')
-const app = express()
-const port = 3000
+const express = require('express');
+const bodyParser = require("body-parser");
+const app = express();
+const port = 3000;
+
+
+//using body parser
+app.use(bodyParser.json());
 
 app.use(express.static("public"));
 
 app.get('/', (req, res) => res.send('Hello World!'));
 
+//to hold the data coming from the post request
+//and payload
+var data = [];
 
-app.get("/api", function(req,res){
+app.post("/api/", function(req,res){
    // res.send("Api")
-    const userName = req.query.username;
-    const userId = req.query.id;
-    const message = req.query.msg;
+    const userName = req.body.userName;
+    const userId = req.body.userId;
+    const message = req.body.message;
 
+    const tempData = {
+        userName,
+        userId,
+        message
+    }
+ data.push(tempData);
     const reply = `${userName} with id ${userId} is saying ${message}`;
-     //console.log(username);
-     res.send(reply);
+     console.log(tempData);
+     res.send(tempData);
 
 });
+
+
+
+
+
+
+
+
 
 app.get("/showprofile/:username", function(req,res){
     const user = req.params.username;
@@ -28,5 +50,5 @@ app.get("/showprofile/:username", function(req,res){
 });
 
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.listen(port, () => console.log(`Server listening on port ${port}!`))
 
